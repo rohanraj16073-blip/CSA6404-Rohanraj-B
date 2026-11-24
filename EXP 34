@@ -1,0 +1,33 @@
+# Sample security event dataset
+events = [
+    {"ip": "192.168.1.10", "event": "failed_login", "count": 8},
+    {"ip": "10.0.0.5", "event": "normal_login", "count": 1},
+    {"ip": "192.168.1.20", "event": "malicious_ip_access", "count": 3},
+    {"ip": "10.0.0.8", "event": "port_scan", "count": 12}
+]
+
+# Threat intelligence indicators
+known_bad_ips = ["192.168.1.20"]
+
+def hypothesis_hunt(data):
+    print("\nHypothesis-Based Hunting:")
+    for item in data:
+        if item["event"] == "failed_login" and item["count"] >= 5:
+            print("Suspicious repeated login:", item["ip"])
+
+def intelligence_hunt(data):
+    print("\nIntelligence-Based Hunting:")
+    for item in data:
+        if item["ip"] in known_bad_ips:
+            print("Known malicious IP detected:", item["ip"])
+
+def analytics_hunt(data):
+    print("\nAnalytics-Based Hunting:")
+    for item in data:
+        if item["count"] >= 10:
+            print("Unusual activity detected:", item["ip"],
+                  "-", item["event"])
+
+hypothesis_hunt(events)
+intelligence_hunt(events)
+analytics_hunt(events)
