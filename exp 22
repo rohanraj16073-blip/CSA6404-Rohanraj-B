@@ -1,0 +1,27 @@
+logs = [
+    ("09:00", "admin", "FAILED"),
+    ("09:01", "admin", "FAILED"),
+    ("09:02", "admin", "FAILED"),
+    ("09:03", "admin", "SUCCESS")
+]
+
+user = input("Enter target username: ")
+threshold = 3
+failures = 0
+detected = False
+
+for time, username, status in logs:
+    if username != user:
+        continue
+
+    if status == "FAILED":
+        failures += 1
+    elif status == "SUCCESS":
+        if failures >= threshold:
+            detected = True
+            print("Alert: Possible brute-force attack!")
+            print("Failed attempts:", failures)
+        failures = 0
+
+if not detected:
+    print("No brute-force pattern detected.")
