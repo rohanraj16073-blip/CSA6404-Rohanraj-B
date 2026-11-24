@@ -1,0 +1,59 @@
+import hashlib
+
+# Static Analysis
+def static_analysis(filename):
+    print("\n=== Static Analysis ===")
+
+    try:
+        with open(filename, "rb") as file:
+            data = file.read()
+
+        file_hash = hashlib.sha256(data).hexdigest()
+        print("SHA-256 Hash:", file_hash)
+
+        suspicious_apis = [
+            b"CreateRemoteThread",
+            b"VirtualAlloc",
+            b"WriteProcessMemory",
+            b"RegSetValue"
+        ]
+
+        for api in suspicious_apis:
+            if api in data:
+                print("Suspicious API Found:", api.decode())
+
+    except FileNotFoundError:
+        print("File not found.")
+        return False
+
+    return True
+
+
+# Simulated Dynamic Analysis
+def dynamic_analysis():
+    print("\n=== Dynamic Analysis ===")
+
+    behavior_logs = [
+        "File created",
+        "Registry modified",
+        "Network connection established",
+        "Process injection detected"
+    ]
+
+    suspicious = [
+        "registry modified",
+        "process injection",
+        "unauthorized network connection"
+    ]
+
+    for log in behavior_logs:
+        print("Behavior:", log)
+
+        if any(item in log.lower() for item in suspicious):
+            print("ALERT: Suspicious behavior detected!")
+
+
+filename = input("Enter sample file name: ")
+
+if static_analysis(filename):
+    dynamic_analysis()
