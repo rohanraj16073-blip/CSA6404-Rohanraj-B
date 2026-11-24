@@ -1,0 +1,43 @@
+# Security tools and their related keywords
+tools = {
+    "Nmap": ["network scanning", "open ports", "port scanning",
+             "network discovery"],
+
+    "Wireshark": ["packet analysis", "network traffic",
+                  "capture packets"],
+
+    "Burp Suite": ["web application testing", "web security",
+                   "sql injection", "web vulnerability"],
+
+    "Nessus": ["vulnerability assessment", "vulnerability scanning",
+               "security weaknesses"],
+
+    "Splunk": ["log analysis", "siem", "security monitoring",
+               "event correlation"],
+
+    "Snort": ["intrusion detection", "network intrusion",
+              "malicious traffic"]
+}
+
+
+def recommend_tool(task):
+    task = task.lower()
+    scores = {}
+
+    for tool, keywords in tools.items():
+        scores[tool] = sum(
+            1 for keyword in keywords if keyword in task
+        )
+
+    best_tool = max(scores, key=scores.get)
+
+    if scores[best_tool] == 0:
+        return "No suitable tool found"
+
+    return best_tool
+
+
+task = input("Enter security task description: ")
+
+print("Recommended Security Tool:",
+      recommend_tool(task))
