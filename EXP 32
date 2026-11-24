@@ -1,0 +1,40 @@
+# CIA Triad Violation Detection
+
+security_properties = [
+    {"property": "Data Encryption", "cia": "Confidentiality",
+     "status": True},
+
+    {"property": "Access Control", "cia": "Confidentiality",
+     "status": False},
+
+    {"property": "File Integrity Check", "cia": "Integrity",
+     "status": True},
+
+    {"property": "Data Modification Protection", "cia": "Integrity",
+     "status": False},
+
+    {"property": "Server Availability", "cia": "Availability",
+     "status": True},
+
+    {"property": "Backup System", "cia": "Availability",
+     "status": False}
+]
+
+violations = set()
+
+print("=== CIA Triad Security Assessment ===")
+
+for item in security_properties:
+    print(item["property"], ":", item["status"])
+
+    if item["status"] == False:
+        violations.add(item["cia"])
+
+print("\n=== Security Violations ===")
+
+if violations:
+    for principle in ["Confidentiality", "Integrity", "Availability"]:
+        if principle in violations:
+            print(principle, "Violation Detected")
+else:
+    print("No CIA violations detected.")
