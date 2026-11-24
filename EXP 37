@@ -1,0 +1,37 @@
+import time
+
+# Normal security baseline
+MAX_FAILED_LOGINS = 2
+
+# Simulated login event stream
+login_events = [
+    {"user": "Ravi", "status": "success", "ip": "192.168.1.10"},
+    {"user": "Arun", "status": "failed", "ip": "192.168.1.20"},
+    {"user": "Arun", "status": "failed", "ip": "192.168.1.20"},
+    {"user": "Arun", "status": "failed", "ip": "192.168.1.20"},
+    {"user": "Kiran", "status": "success", "ip": "192.168.1.30"}
+]
+
+failed_counts = {}
+
+print("Continuous Security Monitoring Started")
+
+for event in login_events:
+    user = event["user"]
+
+    print("\nMonitoring:", user, event["status"])
+
+    if event["status"] == "failed":
+        failed_counts[user] = failed_counts.get(user, 0) + 1
+
+        if failed_counts[user] > MAX_FAILED_LOGINS:
+            print("ALERT: Abnormal login activity detected for", user)
+        else:
+            print("Failed login recorded")
+
+    else:
+        print("Successful login")
+
+    time.sleep(1)
+
+print("\nMonitoring Completed")
