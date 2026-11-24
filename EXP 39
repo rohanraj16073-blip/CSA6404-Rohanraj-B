@@ -1,0 +1,50 @@
+import ipaddress
+from urllib.parse import urlsplit
+
+# Raw threat intelligence feed
+ioc_feed = [
+    "192.168.1.100",
+    "MALICIOUS.COM",
+    "https://BAD-SITE.COM/login"
+]
+
+# Internal security logs
+internal_logs = [
+    "Connection from 192.168.1.100",
+    "Visited malicious.com",
+    "User logged in successfully"
+]
+
+# Normalize IOCs
+def normalize_ioc(ioc):
+    ioc = ioc.strip()
+
+    try:
+        return str(ipaddress.ip_address(ioc))
+    except ValueError:
+        pass
+
+    if "://" in ioc:
+        parsed = urlsplit(ioc)
+        return parsed.hostname.lower() if parsed.hostname else ioc.lower()
+
+    return ioc.lower()
+
+
+normalized_iocs = [normalize_ioc(ioc) for ioc in ioc_feed]
+
+print("Normalized Threat Indicators:")
+for ioc in normalized_iocs:
+    print(ioc)
+
+# Correlate IOCs with internal logs
+print("\nCorrelation Results:")
+
+for log in internal_logs:
+    log_lower = log.lower()
+
+    for ioc in normalized_iocs:
+        if ioc in log_lower:
+            print("ALERT: Threat indicator matched!")
+            print("Indicator:", ioc)
+            print("Log:", log)
