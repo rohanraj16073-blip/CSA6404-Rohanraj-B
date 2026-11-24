@@ -1,0 +1,28 @@
+def classify_compliance(description):
+    text = description.lower()
+
+    standards = {
+        "PCI-DSS": ["payment card", "credit card", "debit card", "cardholder"],
+        "HIPAA": ["patient", "medical", "healthcare", "health records"],
+        "GDPR": ["personal data", "eu citizen", "privacy", "personal information"],
+        "SOX": ["financial report", "accounting", "financial records", "audit"]
+    }
+
+    scores = {}
+
+    for standard, keywords in standards.items():
+        scores[standard] = sum(
+            keyword in text for keyword in keywords
+        )
+
+    best = max(scores, key=scores.get)
+
+    if scores[best] == 0:
+        return "No matching standard identified"
+
+    return best
+
+
+description = input("Enter system description: ")
+print("Applicable Compliance Standard:",
+      classify_compliance(description))
