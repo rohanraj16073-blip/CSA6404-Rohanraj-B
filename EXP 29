@@ -1,0 +1,48 @@
+# Incident Containment Strategy Recommender
+
+def recommend_containment(incident):
+    incident = incident.lower()
+
+    strategies = {
+        "Malware Attack": [
+            "malware", "virus", "ransomware"
+        ],
+        "Phishing Attack": [
+            "phishing", "fake email", "credential theft"
+        ],
+        "DDoS Attack": [
+            "ddos", "denial of service", "traffic flood"
+        ],
+        "Data Breach": [
+            "data breach", "data leakage", "stolen data"
+        ],
+        "Unauthorized Access": [
+            "unauthorized access", "hacked account",
+            "account compromise"
+        ]
+    }
+
+    recommendations = {
+        "Malware Attack":
+            "Isolate infected systems and quarantine malware.",
+        "Phishing Attack":
+            "Block malicious emails and reset compromised credentials.",
+        "DDoS Attack":
+            "Apply rate limiting and activate DDoS protection.",
+        "Data Breach":
+            "Restrict access and protect affected data.",
+        "Unauthorized Access":
+            "Disable compromised accounts and reset passwords."
+    }
+
+    for category, keywords in strategies.items():
+        if any(word in incident for word in keywords):
+            print("Incident Type:", category)
+            print("Containment Strategy:", recommendations[category])
+            return
+
+    print("Incident type not identified.")
+    print("Recommendation: Investigate and assess the incident.")
+
+incident = input("Describe the security incident: ")
+recommend_containment(incident)
