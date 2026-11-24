@@ -1,0 +1,30 @@
+from collections import Counter
+
+# Sample web server logs
+logs = [
+    "192.168.1.10 GET /home",
+    "192.168.1.10 GET /login",
+    "192.168.1.10 GET /about",
+    "192.168.1.10 GET /contact",
+    "192.168.1.10 GET /products",
+    "10.0.0.5 GET /home",
+    "10.0.0.5 GET /about",
+    "172.16.0.2 GET /login"
+]
+
+threshold = 3
+
+# Count requests from each IP
+ip_counts = Counter()
+
+for log in logs:
+    ip = log.split()[0]
+    ip_counts[ip] += 1
+
+print("=== DoS Detection Report ===")
+
+for ip, count in ip_counts.items():
+    print(ip, ":", count, "requests")
+
+    if count > threshold:
+        print("ALERT: Possible DoS activity from", ip)
