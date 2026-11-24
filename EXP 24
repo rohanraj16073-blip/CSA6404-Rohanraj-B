@@ -1,0 +1,32 @@
+baseline = {
+    "Firewall": True,
+    "Antivirus": True,
+    "MFA": True,
+    "Automatic Updates": True
+}
+
+current = {
+    "Firewall": True,
+    "Antivirus": False,
+    "MFA": True,
+    "Automatic Updates": False
+}
+
+passed = 0
+failed = 0
+
+for control, required in baseline.items():
+    if current.get(control) == required:
+        print(control + ": PASS")
+        passed += 1
+    else:
+        print(control + ": FAIL")
+        failed += 1
+
+total = len(baseline)
+percentage = (passed / total) * 100
+
+print("Total Controls:", total)
+print("Passed:", passed)
+print("Failed:", failed)
+print("Compliance:", str(percentage) + "%")
