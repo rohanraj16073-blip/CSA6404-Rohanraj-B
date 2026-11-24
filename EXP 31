@@ -1,0 +1,46 @@
+# Packet Filtering Firewall
+
+rules = [
+    {"protocol": "TCP", "port": 80, "action": "ALLOW"},
+    {"protocol": "TCP", "port": 443, "action": "ALLOW"},
+    {"protocol": "TCP", "port": 22, "action": "DENY"},
+    {"protocol": "ANY", "port": "ANY", "action": "DENY"}
+]
+
+def firewall(protocol, port):
+    print("\nChecking Packet:", protocol, port)
+
+    for rule in rules:
+        protocol_match = (
+            rule["protocol"] == "ANY"
+            or rule["protocol"] == protocol
+        )
+
+        port_match = (
+            rule["port"] == "ANY"
+            or rule["port"] == port
+        )
+
+        if protocol_match and port_match:
+            print("Firewall Action:", rule["action"])
+            return
+
+    print("Firewall Action: DENY (Default Rule)")
+
+# Test packets
+firewall("TCP", 80)
+firewall("TCP", 443)
+firewall("TCP", 22)
+firewall("UDP", 53)
+
+# Demonstrate rule ordering
+print("\n=== Rule Ordering Demonstration ===")
+
+# Broad deny rule placed before specific allow rule
+wrong_rules = [
+    {"protocol": "ANY", "port": "ANY", "action": "DENY"},
+    {"protocol": "TCP", "port": 80, "action": "ALLOW"}
+]
+
+rules = wrong_rules
+firewall("TCP", 80)
