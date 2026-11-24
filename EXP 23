@@ -1,0 +1,16 @@
+whitelist = {"192.168.1.10"}
+malicious_signature = "MALICIOUS"
+
+traffic = [
+    ("192.168.1.10", "NORMAL"),
+    ("203.0.113.50", "MALICIOUS"),
+    ("203.0.113.60", "NORMAL")
+]
+
+for ip, payload in traffic:
+    if ip in whitelist:
+        print(ip, "-> ALLOW (Trusted Source)")
+    elif malicious_signature in payload:
+        print(ip, "-> BLOCK (Malicious Signature)")
+    else:
+        print(ip, "-> ALLOW (No Threat Detected)")
