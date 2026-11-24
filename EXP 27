@@ -1,0 +1,42 @@
+# Signature-Based Intrusion Detection System
+
+signatures = [
+    {
+        "protocol": "TCP",
+        "port": 80,
+        "pattern": "union select",
+        "alert": "Possible SQL Injection"
+    },
+    {
+        "protocol": "TCP",
+        "port": 22,
+        "pattern": "failed password",
+        "alert": "Possible SSH Attack"
+    },
+    {
+        "protocol": "TCP",
+        "port": 445,
+        "pattern": "smb exploit",
+        "alert": "Possible SMB Exploit"
+    }
+]
+
+def detect_intrusion(protocol, port, content):
+    print("\nChecking Network Traffic...")
+
+    for rule in signatures:
+        if (protocol.upper() == rule["protocol"]
+            and port == rule["port"]
+            and rule["pattern"] in content.lower()):
+
+            print("ALERT:", rule["alert"])
+            return
+
+    print("No intrusion detected.")
+
+# Main program
+protocol = input("Enter protocol: ")
+port = int(input("Enter destination port: "))
+content = input("Enter packet content: ")
+
+detect_intrusion(protocol, port, content)
