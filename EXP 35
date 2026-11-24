@@ -1,0 +1,29 @@
+# Required permissions for each role
+roles = {
+    "Admin": {"read", "write", "delete", "manage"},
+    "Analyst": {"read", "write"},
+    "Guest": {"read"}
+}
+
+# User accounts and assigned permissions
+users = [
+    {"name": "Ravi", "role": "Analyst",
+     "permissions": {"read", "write"}},
+    {"name": "Kiran", "role": "Guest",
+     "permissions": {"read", "delete"}},
+    {"name": "Arun", "role": "Admin",
+     "permissions": {"read", "write", "delete", "manage"}}
+]
+
+print("Least Privilege Audit Results")
+
+for user in users:
+    required = roles[user["role"]]
+    assigned = user["permissions"]
+
+    excess = assigned - required
+
+    if excess:
+        print(user["name"], "- Excess permissions:", excess)
+    else:
+        print(user["name"], "- Access is appropriate")
