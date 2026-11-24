@@ -1,0 +1,18 @@
+text = input("Enter incident description: ").lower()
+
+keywords = {
+    "Phishing": ["fake email", "fraudulent website", "password theft"],
+    "DoS/DDoS": ["denial of service", "ddos", "traffic flood"],
+    "Malware": ["ransomware", "virus", "malware"],
+    "Man-in-the-Middle": ["intercept", "mitm", "communication interception"]
+}
+
+matches = [
+    category for category, words in keywords.items()
+    if any(word in text for word in words)
+]
+
+if matches:
+    print("Detected Threat:", ", ".join(matches))
+else:
+    print("Threat category not identified.")
