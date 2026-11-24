@@ -1,0 +1,63 @@
+import hashlib
+import json
+
+def calculate_hash(record):
+    data = json.dumps(record, sort_keys=True)
+    return hashlib.sha256(data.encode()).hexdigest()
+
+def verify_chain(records):
+    previous_hash = "GENESIS"
+    previous_time = -1
+
+    for i, record in enumerate(records):
+        if record["timestamp"] < previous_time:
+            print("Chain verification FAILED: Timestamp error")
+            return
+
+        if record["previous_hash"] != previous_hash:
+            print("Chain verification FAILED: Hash mismatch")
+            return
+
+        current_data = {
+            "evidence": record["evidence"],
+            "timestamp": record["timestamp"],
+            "previous_hash": record["previous_hash"]
+        }
+
+        current_hash = calculate_hash(current_data)
+
+        if record["hash"] != current_hash:
+            print("Chain verification FAILED: Record modified")
+            return
+
+        previous_hash = current_hash
+        previous_time = record["timestamp"]
+
+    print("Chain of Custody: VERIFIED")
+    print("All hashes and timestamps are valid.")
+
+# Create sample evidence records
+records = []
+previous = "GENESIS"
+
+for evidence, timestamp in [
+    ("Evidence collected", 100),
+    ("Evidence transferred", 110),
+    ("Evidence examined", 120)
+]:
+    data = {
+        "evidence": evidence,
+        "timestamp": timestamp,
+        "previous_hash": previous
+    }
+
+    current = calculate_hash(data)
+
+    records.append({
+        **data,
+        "hash": current
+    })
+
+    previous = current
+
+verify_chain(records)
