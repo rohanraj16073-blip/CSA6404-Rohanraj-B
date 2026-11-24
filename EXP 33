@@ -1,0 +1,21 @@
+def classify_phase(action):
+    action = action.lower()
+
+    phases = {
+        "Preparation": ["training", "plan", "policy", "prepare", "backup"],
+        "Identification": ["detect", "identify", "investigate", "alert", "analyze"],
+        "Containment": ["isolate", "block", "disable", "disconnect", "restrict"],
+        "Eradication": ["remove", "delete", "clean", "patch", "eliminate"],
+        "Recovery": ["restore", "recover", "rebuild", "resume"],
+        "Lessons Learned": ["review", "document", "improve", "lessons", "report"]
+    }
+
+    for phase, keywords in phases.items():
+        if any(word in action for word in keywords):
+            return phase
+
+    return "Phase not identified"
+
+
+action = input("Enter incident response action: ")
+print("Incident Response Phase:", classify_phase(action))
