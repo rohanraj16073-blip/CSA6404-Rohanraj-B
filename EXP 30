@@ -1,0 +1,49 @@
+# SIEM Log Correlation
+
+firewall_logs = [
+    {"ip": "192.168.1.50", "event": "BLOCKED"},
+    {"ip": "192.168.1.50", "event": "BLOCKED"}
+]
+
+windows_logs = [
+    {"ip": "192.168.1.50", "event": "FAILED_LOGIN"},
+    {"ip": "192.168.1.50", "event": "FAILED_LOGIN"},
+    {"ip": "192.168.1.50", "event": "FAILED_LOGIN"}
+]
+
+vpn_logs = [
+    {"ip": "192.168.1.50", "event": "VPN_LOGIN_SUCCESS"}
+]
+
+# Collect information from all logs
+failed_attempts = {}
+blocked_ips = set()
+vpn_success_ips = set()
+
+for log in firewall_logs:
+    if log["event"] == "BLOCKED":
+        blocked_ips.add(log["ip"])
+
+for log in windows_logs:
+    if log["event"] == "FAILED_LOGIN":
+        ip = log["ip"]
+        failed_attempts[ip] = failed_attempts.get(ip, 0) + 1
+
+for log in vpn_logs:
+    if log["event"] == "VPN_LOGIN_SUCCESS":
+        vpn_success_ips.add(log["ip"])
+
+# Correlate events
+print("=== SIEM Correlation Report ===")
+
+for ip, count in failed_attempts.items():
+    if (count >= 3 and ip in blocked_ips
+            and ip in vpn_success_ips):
+
+        print("ALERT: Possible Brute-Force Attack")
+        print("Source IP:", ip)
+        print("Failed Login Attempts:", count)
+        print("Firewall: Blocked activity detected")
+        print("VPN: Successful login detected")
+    else:
+        print("No correlated attack detected for:", ip)
